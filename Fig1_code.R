@@ -1,0 +1,130 @@
+#plot uncertainty in estimation (four classes)
+#Fig. 1
+
+pdf(file="Fig.1.pdf", w=9,h=7)
+
+par(mfrow=c(1,3), mar=c(5,2,2,1), oma=c(1,1,1,1))
+set.seed(42)
+a=abs(rnorm(100, 2, sd= 0.02))
+b=abs(rnorm(100, 2, sd= 0.5))
+c=abs(rnorm(100, 2, sd= 1))
+d=abs(rnorm(100, 2, sd= 2))
+#par(mfrow=c(1,1))
+plot(  c(1,2,3,4),c(median(a), median(b), median(c),median(d)), xlim=c(0.5, 4.5), ylim=c(0,6), 
+     cex=2, pch=20, xlab=c("uncertainty"), cex.lab=1.75, ylab=c(""), main="A. Four classes of uncertainty", axes=F)
+arrows(1, quantile(a, 0.975),  1,quantile(a, (1-0.975)), code=3, length=0.1, angle=90,)
+arrows(2,quantile(b, 0.975), 2, quantile(b, (1-0.975)),  code=3, length=0.1, angle=90)
+arrows( 3,quantile(c, 0.975),  3,quantile(c, (1-0.975)), code=3, length=0.1, angle=90)
+arrows(4,quantile(d, 0.975),  4,quantile(d, (1-0.975)),  code=3, length=0.1, angle=90)
+axis(1, at =c(1,2,3,4), labels=c("lowest", "low", "high", "highest"))
+axis(2)
+abline(h=2, lwd=1.5, col="red")
+legend(1,6, "true value", col=c("red"), pch="-", bty="n", text.col=c("red"))
+box()
+
+#two clades slow is red
+set.seed(42)
+group1=abs(rnorm(100, 1.5, 0.1))
+group2=abs(rnorm(100, 1.3, 0.1))
+hist(group2, col=rgb(0,0,1,1/4), xlim=c(1,1.8),ylim=c(0,30), xlab="individual rates",cex.lab=1.75, main="B. Two clades")  # first histogram
+points(median(group2), 0, col="blue", pch=20, cex=2)
+hist(group1, col=rgb(1,0,0,1/4), add=T)
+points(median(group1), 0,col="red", pch=20, cex=2)
+box()
+median(group1)
+median(group2)
+
+#two clades with different uncertainties so each lineage gets sd
+
+group1a=apply(as.data.frame(group1),1,  function(x){abs(rnorm(1,x,sd=0.02))})
+group1b=apply(as.data.frame(group1),1,  function(x){abs(rnorm(1,x,sd=0.05))})
+group1c=apply(as.data.frame(group1),1,  function(x){abs(rnorm(1,x,sd=1))})
+group1d=apply(as.data.frame(group1),1,  function(x){abs(rnorm(1,x,sd=2))})
+
+group2a=apply(as.data.frame(group2),1,  function(x){abs(rnorm(1,x,sd=0.002))})
+group2b=apply(as.data.frame(group2),1,  function(x){abs(rnorm(1,x,sd=0.05))})
+group2c=apply(as.data.frame(group2),1,  function(x){abs(rnorm(1,x,sd=1))})
+group2d=apply(as.data.frame(group2),1,  function(x){abs(rnorm(1,x,sd=2))})
+
+plot( c(median(group1a), median(group1b), median(group1c), median(group1d)), c(1,2,3,4), xlim=c(0, 7), ylim=c(0,5), 
+      pch=20, axes=F,cex=2, xlab=c("rates"),cex.lab=1.75, ylab=c(""), col="red", main="C. Combinations")
+arrows(quantile(group1a, 0.975), 1, quantile(group1a, (1-0.975)), 1, code=3, length=0.1, angle=90, col="red")
+arrows(quantile(group1b, 0.975), 2, quantile(group1b, (1-0.975)), 2, code=3, length=0.1, angle=90, col="red")
+arrows(quantile(group1c, 0.975), 3, quantile(group1c, (1-0.975)), 3, code=3, length=0.1, angle=90, col="red")
+arrows(quantile(group1d, 0.975), 4, quantile(group1d, (1-0.975)), 4, code=3, length=0.1, angle=90, col="red")
+axis(1)
+box()
+
+points( c(median(group2a), median(group2b), median(group2c), median(group2d)), c(1,2,3,4)+0.1,pch=20, ,cex=2,col="blue")
+arrows(quantile(group2a, 0.975), 1+0.1, quantile(group2a, (1-0.975)), 1+0.1, code=3, length=0.1, angle=90, col="blue")
+arrows(quantile(group2b, 0.975), 2+0.1, quantile(group2b, (1-0.975)), 2+0.1, code=3, length=0.1, angle=90, col="blue")
+arrows(quantile(group2c, 0.975), 3+0.1, quantile(group2c, (1-0.975)), 3+0.1, code=3, length=0.1, angle=90, col="blue")
+arrows(quantile(group2d, 0.975), 4+0.1, quantile(group2d, (1-0.975)), 4+0.1, code=3, length=0.1, angle=90, col="blue")
+text(3, 1, "lowest*\nuncertainty")
+text(3, 2, "low*\nuncertainty")
+text(4.5, 3, "high\nuncertainty")
+text(6.3,4,  "highest\nuncertainty")
+dev.off()
+pdf(file="/Documents/Rosana Zenil-Ferguson/Fig.1Simpson.pdf", w=7,h=9)
+par(mfrow=c(1,3), mar=c(5,2,2,1), oma=c(1,1,1,1))
+set.seed(42)
+a=abs(rnorm(100, 2, sd= 0.02))
+b=abs(rnorm(100, 2, sd= 0.5))
+c=abs(rnorm(100, 2, sd= 1))
+d=abs(rnorm(100, 2, sd= 2))
+#par(mfrow=c(1,1))
+plot(  c(1,2,3,4),c(median(a), median(b), median(c),median(d)), xlim=c(0.5, 4.5), ylim=c(0,6), 
+     cex=2, pch=20, xlab=c("uncertainty"), cex.lab=1.75, ylab=c(""), main="A. Four classes of uncertainty", axes=F)
+arrows(1, quantile(a, 0.975),  1,quantile(a, (1-0.975)), code=3, length=0.1, angle=90,)
+arrows(2,quantile(b, 0.975), 2, quantile(b, (1-0.975)),  code=3, length=0.1, angle=90)
+arrows( 3,quantile(c, 0.975),  3,quantile(c, (1-0.975)), code=3, length=0.1, angle=90)
+arrows(4,quantile(d, 0.975),  4,quantile(d, (1-0.975)),  code=3, length=0.1, angle=90)
+axis(1, at =c(1,2,3,4), labels=c("lowest", "low", "high", "highest"))
+axis(2)
+abline(h=2, lwd=1.5, col="red")
+legend(1,6, "true value", col=c("red"), pch="-", bty="n", text.col=c("red"))
+box()
+
+#two clades slow is red
+set.seed(42)
+group1=abs(rnorm(100, 1.5, 0.1))
+group2=abs(rnorm(100, 1.3, 0.1))
+hist(group2, col=rgb(0,0,1,1/4), xlim=c(1,1.8),ylim=c(0,30), xlab="individual rates",cex.lab=1.75, main="B. Two clades")  # first histogram
+points(median(group2), 0, col="blue", pch=20, cex=2)
+hist(group1, col=rgb(1,0,0,1/4), add=T)
+points(median(group1), 0,col="red", pch=20, cex=2)
+box()
+median(group1)
+median(group2)
+
+#two clades with different uncertainties so each lineage gets sd
+
+group1a=apply(as.data.frame(group1),1,  function(x){abs(rnorm(1,x,sd=0.02))})
+group1b=apply(as.data.frame(group1),1,  function(x){abs(rnorm(1,x,sd=0.05))})
+group1c=apply(as.data.frame(group1),1,  function(x){abs(rnorm(1,x,sd=1))})
+group1d=apply(as.data.frame(group1),1,  function(x){abs(rnorm(1,x,sd=2))})
+
+group2a=apply(as.data.frame(group2),1,  function(x){abs(rnorm(1,x,sd=0.002))})
+group2b=apply(as.data.frame(group2),1,  function(x){abs(rnorm(1,x,sd=0.05))})
+group2c=apply(as.data.frame(group2),1,  function(x){abs(rnorm(1,x,sd=1))})
+group2d=apply(as.data.frame(group2),1,  function(x){abs(rnorm(1,x,sd=2))})
+
+plot( c(median(group1a), median(group1b), median(group1c), median(group1d)), c(1,2,3,4), xlim=c(0, 7), ylim=c(0,5), 
+      pch=20, axes=F,cex=2, xlab=c("rates"),cex.lab=1.75, ylab=c(""), col="red", main="C. Combinations")
+arrows(quantile(group1a, 0.975), 1, quantile(group1a, (1-0.975)), 1, code=3, length=0.1, angle=90, col="red")
+arrows(quantile(group1b, 0.975), 2, quantile(group1b, (1-0.975)), 2, code=3, length=0.1, angle=90, col="red")
+arrows(quantile(group1c, 0.975), 3, quantile(group1c, (1-0.975)), 3, code=3, length=0.1, angle=90, col="red")
+arrows(quantile(group1d, 0.975), 4, quantile(group1d, (1-0.975)), 4, code=3, length=0.1, angle=90, col="red")
+axis(1)
+box()
+
+points( c(median(group2a), median(group2b), median(group2c), median(group2d)), c(1,2,3,4)+0.1,pch=20, ,cex=2,col="blue")
+arrows(quantile(group2a, 0.975), 1+0.1, quantile(group2a, (1-0.975)), 1+0.1, code=3, length=0.1, angle=90, col="blue")
+arrows(quantile(group2b, 0.975), 2+0.1, quantile(group2b, (1-0.975)), 2+0.1, code=3, length=0.1, angle=90, col="blue")
+arrows(quantile(group2c, 0.975), 3+0.1, quantile(group2c, (1-0.975)), 3+0.1, code=3, length=0.1, angle=90, col="blue")
+arrows(quantile(group2d, 0.975), 4+0.1, quantile(group2d, (1-0.975)), 4+0.1, code=3, length=0.1, angle=90, col="blue")
+text(3, 1, "lowest*\nuncertainty")
+text(3, 2, "low*\nuncertainty")
+text(4.5, 3, "high\nuncertainty")
+text(6.3,4,  "highest\nuncertainty")
+dev.off()
